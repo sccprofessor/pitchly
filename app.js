@@ -38,7 +38,7 @@ function populateDropdown(id, options) {
   const sel = document.getElementById(id);
   sel.innerHTML = options.map(n => `<option value="${n}">${n}</option>`).join("");
 }
-["note1","note2","note3","chord1","chord2","chord3","chord4"].forEach(id => populateDropdown(id, NOTES));
+["note1","note2","note3","note4"].forEach(id => populateDropdown(id, NOTES));
 populateDropdown("keySignature", KEYS);
 
 // --- AUDIO PLAYBACK ---
@@ -58,31 +58,12 @@ function playNote(freq, duration, ctx) {
     }, duration);
   });
 }
-async function playSequence(notes, chord, totalMs) {
+async function playSequence(notes, totalMs) {
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const n = notes.length + 1;
-  const per = Math.floor(totalMs / n);
+  const per = Math.floor(totalMs / notes.length);
   for (let note of notes) {
     await playNote(NOTE_FREQS[note], per, ctx);
   }
-  // Play chord
-  await new Promise(res => {
-    const gains = chord.map(() => ctx.createGain());
-    const oscs = chord.map((note, i) => {
-      const osc = ctx.createOscillator();
-      osc.type = "sine";
-      osc.frequency.value = NOTE_FREQS[note];
-      osc.connect(gains[i]).connect(ctx.destination);
-      gains[i].gain.value = 0.15;
-      return osc;
-    });
-    oscs.forEach(osc => osc.start());
-    setTimeout(() => {
-      gains.forEach(g => g.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.1));
-      oscs.forEach(osc => osc.stop(ctx.currentTime + 0.1));
-      res();
-    }, per);
-  });
   ctx.close();
 }
 
@@ -108,11 +89,10 @@ function showMessage(msg, timeout=2000) {
 }
 
 document.getElementById("playBtn").onclick = async function() {
-  const notes = ["note1","note2","note3"].map(id => document.getElementById(id).value);
-  const chord = ["chord1","chord2","chord3","chord4"].map(id => document.getElementById(id).value);
+  const notes = ["note1","note2","note3","note4"].map(id => document.getElementById(id).value);
   const timing = parseInt(document.querySelector("input[name='timing']:checked").value);
   showMessage("Playing...");
-  await playSequence(notes, chord, timing * 1000);
+  await playSequence(notes, timing * 1000);
   showMessage("Done!");
 };
 
@@ -121,13 +101,12 @@ document.getElementById("saveBtn").onclick = async function() {
   if (!db) return;
   const title = document.getElementById("songTitle").value.trim();
   if (!title) return showMessage("Enter a song title.");
-  const notes = ["note1","note2","note3"].map(id => document.getElementById(id).value);
-  const chord = ["chord1","chord2","chord3","chord4"].map(id => document.getElementById(id).value);
+  const notes = ["note1","note2","note3","note4"].map(id => document.getElementById(id).value);
   const key = document.getElementById("keySignature").value;
   const timing = parseInt(document.querySelector("input[name='timing']:checked").value);
   try {
     await db.collection("songs").doc(title).set({
-      notes, chord, key, timing, title
+      notes, key, timing, title
     });
     showMessage("Saved!");
   } catch (e) {
@@ -144,8 +123,7 @@ document.getElementById("loadBtn").onclick = async function() {
     const doc = await db.collection("songs").doc(title).get();
     if (!doc.exists) return showMessage("Not found.");
     const data = doc.data();
-    ["note1","note2","note3"].forEach((id,i) => document.getElementById(id).value = data.notes[i]);
-    ["chord1","chord2","chord3","chord4"].forEach((id,i) => document.getElementById(id).value = data.chord[i]);
+    ["note1","note2","note3","note4"].forEach((id,i) => document.getElementById(id).value = data.notes[i]);
     document.getElementById("keySignature").value = data.key;
     document.querySelector(`input[name='timing'][value='${data.timing}']`).checked = true;
     showMessage("Loaded!");
@@ -164,4 +142,4 @@ document.getElementById("loadBtn").onclick = async function() {
     document.body.appendChild(script2);
   };
   document.body.appendChild(script);
-})();
+})(); 
