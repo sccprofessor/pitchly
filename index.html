@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pitch Pipe & Chord Web Tool</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Pitch Pipe & Chord Tool</h1>
+  </header>
+  <main>
+    <form id="songForm" autocomplete="off">
+      <section class="note-section">
+        <label>Note 1:
+          <select id="note1"></select>
+        </label>
+        <label>Note 2:
+          <select id="note2"></select>
+        </label>
+        <label>Note 3:
+          <select id="note3"></select>
+        </label>
+      </section>
+      <section class="chord-section">
+        <label>Chord Note 1:
+          <select id="chord1"></select>
+        </label>
+        <label>Chord Note 2:
+          <select id="chord2"></select>
+        </label>
+        <label>Chord Note 3:
+          <select id="chord3"></select>
+        </label>
+        <label>Chord Note 4:
+          <select id="chord4"></select>
+        </label>
+      </section>
+      <section class="key-section">
+        <label>Key Signature:
+          <select id="keySignature"></select>
+        </label>
+      </section>
+      <section class="timing-section">
+        <span>Playback Duration:</span>
+        <label><input type="radio" name="timing" value="2" checked>2s</label>
+        <label><input type="radio" name="timing" value="3">3s</label>
+        <label><input type="radio" name="timing" value="4">4s</label>
+        <label><input type="radio" name="timing" value="5">5s</label>
+      </section>
+      <section class="title-section">
+        <label>Song Title:
+          <input type="text" id="songTitle" maxlength="50" required>
+        </label>
+      </section>
+      <section class="button-section">
+        <button type="button" id="playBtn">Play</button>
+        <button type="button" id="saveBtn">Save</button>
+        <button type="button" id="loadBtn">Load</button>
+      </section>
+    </form>
+    <div id="message"></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
