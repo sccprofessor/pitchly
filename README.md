@@ -29,8 +29,8 @@ Firebase Setup
 Usage
 -----
 - Open index.html in your browser (or from your server's URL).
-- Select notes, chord, key, timing, and enter a song title.
-- Use Play to hear the sequence, Save to store, and Load to retrieve by title.
+- Select 4 notes, key, timing, and enter a song title.
+- Use Play to hear the 4-note sequence, Save to store, and Load to retrieve by title.
 
 ---
 
@@ -44,4 +44,4 @@ Branding
 Support
 -------
 - If you need to reset Firestore rules for public access, see Firebase docs: https://firebase.google.com/docs/firestore/security/get-started
-- For any issues, check your browser console for errors.
+- For any issues, check your browser console for errors. 
